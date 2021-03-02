@@ -43,6 +43,7 @@ def main(search_object):
     file.write(headers)
     i, count = 0, 0
 
+    # For the simplcity of the test, i  have used i=2 you can remove this so you will get upto 500 entries.
     while count <= 500 or i < 2:
         try:
             url = f"https://www.flipkart.com/search?q={search_object}"
