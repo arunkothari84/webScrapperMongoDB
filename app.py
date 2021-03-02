@@ -13,6 +13,7 @@ db = mongoDBClient.get_client()
 app = Flask(__name__)
 
 
+# Decoding the string we encoded while inserting in MONGOdb
 def decodeKey(key):
     return key.replace("\\u002e", ".").replace("\\u0024", "\$").replace("\\\\", "\\")
 
@@ -23,11 +24,12 @@ def homePage():
     return render_template("index.html")
 
 
-@app.route('/products', methods=['POST', 'GET'])  # route to show the review comments in a web UI
+@app.route('/products', methods=['POST', 'GET'])  # route to show the products in a web UI
 @cross_origin()
 def index():
     if request.method == 'POST':
         try:
+            # Check weather the same name is present or not
             searchString = request.form['content'].replace(" ", "")
             if MongoDB.mongoDB(searchString) == 'NOT EXIST':
                 main(searchString)
@@ -37,12 +39,15 @@ def index():
                 cursor = coll.find({})
                 documents = []
                 for document in cursor:
+                    # Removing '_id' from the document
                     del document['_id']
                     documents.append(document)
 
+                # Importing the documents and saving it in a file to read.
                 documents_json = dumps(documents)
                 pd.read_json(documents_json).to_csv('products.txt', sep='\t', index=False, header=False)
 
+            # Reading the file where products are present.
             file = open('products.txt', 'r')
             lines = file.readlines()
             reviews = []
