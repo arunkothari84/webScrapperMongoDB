@@ -1,6 +1,7 @@
 from json import dumps
 import urllib.parse
 from bs4 import BeautifulSoup as bs
+from flask_cors import CORS,cross_origin
 import requests
 from flask import Flask, render_template, request
 from flask_cors import cross_origin
